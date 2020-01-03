@@ -1,0 +1,7 @@
+app-footer {
+    display: flex;
+    flex-direction: column;
+}
+.app-body {
+    min-height: calc(100vh - 105px);
+}

@@ -1,0 +1,6 @@
+a.navbar-brand {
+    width: 200px !important;
+}
+.brand-minimized .app-header .navbar-brand {
+    width: 50px !important;
+}

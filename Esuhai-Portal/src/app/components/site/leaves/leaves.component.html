@@ -1,0 +1,279 @@
+<!-- Breadcrum-->
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Home</li>
+  <li class="breadcrumb-item">Nghỉ phép</li>
+  <li class="breadcrumb-item">
+    <a href="#">Đăng ký nghỉ phép</a>
+  </li>
+  <li class="breadcrumb-item active">Đăng ký</li>
+  <!-- Breadcrumb Menu-->
+  <li class="breadcrumb-menu d-md-down-none">
+    <div class="btn-group" role="group" aria-label="Button group">
+      <a class="btn" href="#">
+        <i class="icon-speech"></i>
+      </a>
+      <a class="btn" href="./">
+        <i class="icon-graph"></i>  Dashboard</a>
+      <a class="btn" href="#">
+        <i class="icon-settings"></i>  Settings</a>
+    </div>
+  </li>
+</ol>
+
+<div class="container-fluid">
+  <div class="animated fadeIn">
+    <div class="card">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-sm-6 col-md-6 col-lg-6 form-inline cus-header-action-date">
+            <label>Từ ngày</label>
+            <input class="form-control" type="date" [(ngModel)]="leaveParams.StartDate" (ngModelChange)="typeChanged()">
+
+            <label>Đến ngày</label>
+            <input class="form-control" type="date" [(ngModel)]="leaveParams.EndDate" (ngModelChange)="typeChanged()">
+          </div>
+
+          <div class="col-sm-3 col-md-3 col-lg-3 form-inline cus-header-action-select">
+            <label>Phòng</label>
+            <select class="form-control" [(ngModel)]="leaveParams.DepartmentId" (ngModelChange)="typeChanged()">
+              <option *ngFor="let dept of departments" [ngValue]="dept.id">
+                {{dept.deptName}}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-sm-3 col-md-3 col-lg-3 form-inline cus-header-action-search">            
+            <input type="text" class="form-control" placeholder="Tìm kiếm theo tên..." (ngModelChange)="typeChanged()" />
+            <button class="btn btn-primary" type="button">
+              <i class="icon-magnifier"></i> Filter
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body">
+
+        <div class="cus-nav-control row">
+          <div class="col-md-2" style="display: flex;">
+            <span style="margin-top: 10px;">Tổng số:
+              <span class="badge badge-pill badge-success">{{pagination ? pagination.TotalItems : 0}}</span>
+            </span>
+          </div>
+          <div class="col-md-3 form-inline">
+            <label>Phân loại:</label>
+            <select class="form-control border-0" [(ngModel)]="leaveParams.FilterBy" (ngModelChange)="typeChanged()">
+              <option *ngFor="let type of typeLeaves" [ngValue]="type.value">
+                {{type.name}}
+              </option>
+            </select>
+          </div>
+          <div class="col-md-7">
+            <button class="btn btn-ghost-primary pull-right" type="button" data-toggle="modal"
+              data-target="#largeModal">
+              <i class="icon-plus"></i> Đăng ký
+            </button>
+            <button class="btn btn-ghost-primary pull-right" type="button" (click)="showLeaveDialog()">
+              <i class="icon-plus"></i> Đăng ký
+            </button>
+
+            <button class="btn btn-ghost-primary pull-right" type="button" data-toggle="modal"
+              data-target="#largeModal">
+              <i class="icon-cloud-download"></i> Export Excel
+            </button>
+
+            <button class="btn btn-ghost-primary pull-right" type="button" data-toggle="modal"
+              data-target="#largeModal">
+              <i class="icon-screen-tablet"></i> Quản lý ngày phép
+            </button>
+
+            <div class="form-check-inline pull-right" style="height: 100%;">
+              <input class="form-check-input" type="checkbox" value="check1">
+              <label class="form-check-label">Nghỉ phép của tôi</label>
+            </div>
+          </div>
+        </div>
+
+        <table class="table table-responsive-sm table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Họ tên</th>
+              <th>Chức vụ</th>
+              <th>Bắt đầu</th>
+              <th>Kết thúc</th>
+              <th>Số giờ</th>
+              <th>TB duyệt</th>
+              <th>TP duyệt</th>
+              <th>NS duyệt</th>
+              <th>Trạng thái</th>
+              <th>Ngày đăng ký</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="pagination.TotalItems > 0">
+            <tr *ngFor="let leave of leaves">
+              <td>
+                <input type="checkbox" />
+              </td>
+              <td>{{leave.nhanVienNghiPhepFullName}}</td>
+              <td>{{leave.nhanVienNghiPhepChucDanh}}</td>
+              <td>{{leave.startTime | date:'dd/MM/yyyy HH:mm'}}</td>
+              <td>{{leave.endTime | date:'dd/MM/yyyy HH:mm'}}</td>
+              <td>{{leave.days}}</td>
+              <td>
+                <i *ngIf="leave.truongBanApprovalStatus == 'Approve'" class="icon-check"></i>
+                <i *ngIf="leave.truongBanApprovalStatus == 'Reject'" class="icon-close"></i>
+              </td>
+              <td>
+                <i *ngIf="leave.truongPhongApprovalStatus == 'Approve'" class="icon-check"></i>
+                <i *ngIf="leave.truongPhongApprovalStatus == 'Reject'" class="icon-close"></i>
+              </td>
+              <td>
+                <i *ngIf="leave.hrApprovalStatus == 'Approve'" class="icon-check"></i>
+                <i *ngIf="leave.hrApprovalStatus == 'Reject'" class="icon-close"></i>
+              </td>
+              <td>{{leave.leaveStatus}}</td>
+              <td></td>
+            </tr>
+          </tbody>
+          <tbody *ngIf="pagination.TotalItems < 1">
+            <td colspan="11">Chưa có dữ liệu</td>
+          </tbody>
+        </table>
+
+        <div class="d-flex justify-content-left pagination" *ngIf="pagination && pagination.TotalItems > 0">
+          <pagination (ngModel)="pagination.CurrentPage" (pageChanged)="pageChanged($event)" previousText="&lsaquo;"
+            nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;" [boundaryLinks]="true"
+            [totalItems]="pagination.TotalItems" [itemsPerPage]="pagination.ItemsPerPage" [maxSize]="3">
+          </pagination>
+        </div>
+
+        <div class="modal fade" id="largeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+          style="display: none;" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title">ĐĂNG KÝ NGHỈ PHÉP</h4>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+
+              <div class="modal-body leave-form">
+
+                <div class="form-group row">
+                  <label class="col-md-2 col-form-label text-right">Mã nhân viên</label>
+                  <label class="col-md-3 col-form-label">S189</label>
+
+                  <label class="col-md-3 col-form-label text-right">Họ và tên</label>
+                  <label class="col-md-4 col-form-label">NGUYỄN VĂN HOÀNG</label>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-2 col-form-label text-right">Phòng</label>
+                  <label class="col-md-3 col-form-label">Quản trị chiến lược</label>
+
+                  <label class="col-md-3 col-form-label text-right">Ban</label>
+                  <label class="col-md-4 col-form-label">Hồ sơ phái cử</label>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-2 col-form-label text-right">Chức danh</label>
+                  <label class="col-md-3 col-form-label">Nhân viên</label>
+
+                  <label class="col-md-3 col-form-label text-right">Phân loại</label>
+                  <label class="col-md-4 col-form-label">Chính thức</label>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-2 col-form-label text-right">Thời gian nghỉ</label>
+                  <div class="col-md-6">
+                    <div class="form-inline leave-datetime-control">
+                      <input type="date" class="form-control">
+                      <select class="form-control">
+                        <option>08 : 00</option>
+                        <option>12 : 00</option>
+                        <option>13 : 00</option>
+                        <option>17 : 00</option>
+                      </select>
+                    </div>
+                    <div class="form-inline leave-datetime-control">
+                      <input type="date" class="form-control">
+                      <select class="form-control">
+                        <option>08 : 00</option>
+                        <option>12 : 00</option>
+                        <option>13 : 00</option>
+                        <option>17 : 00</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <label>Tống số ngày nghỉ: 0.5</label>
+                    <label>Số ngày phép còn lại trong tháng: 08</label>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-2 col-form-label text-right">Lý do nghỉ</label>
+                  <div class="col-md-10">
+                    <textarea class="form-control" name="textarea-input" rows="2" placeholder="Lý do nghỉ.."></textarea>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-2 col-form-label text-right">NV thay thế</label>
+                  <div class="col-md-10">
+                    <ng-select [multiple]="true" [(ngModel)]="nhanvienthaythes">
+                      <ng-option *ngFor="let emp of employees" [value]="emp.id">{{emp.name}}</ng-option>
+                      <ng-option [value]="'custom'">Custom</ng-option>
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-2 col-form-label text-right">Công việc thay thế</label>
+                  <div class="col-md-10">
+                    <textarea class="form-control" name="textarea-input" rows="2" placeholder="Lý do nghỉ.."></textarea>
+                  </div>
+                </div>
+                <div class="form-group row text-right">
+                  <label class="col-md-2 col-form-label">TB xét duyệt</label>
+                  <div class="col-md-4">
+                    <select class="form-control">
+                      <option value="0">---</option>
+                      <option value="1">Nguyễn Văn Bê</option>
+                      <option value="2">Nguyễn Văn Cê</option>
+                      <option value="3">Nguyễn Văn Rê</option>
+                    </select>
+
+                  </div>
+                  <label class="col-md-2 col-form-label text-right">TP xét duyệt</label>
+                  <div class="col-md-4">
+                    <select class="form-control">
+                      <option value="0">---</option>
+                      <option value="1">Nguyễn Văn Bê</option>
+                      <option value="2">Nguyễn Văn Cê</option>
+                      <option value="3">Nguyễn Văn Rê</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-12 col-form-label">
+                    <input type="checkbox">
+                    Tôi cam kết đã bàn giao toàn bộ công việc, tài liệu, hồ sơ liên quan trong thời gian nghỉ phép cho
+                    nhân viên thay thế. Đồng thời, sau thời gian nghỉ phép, tôi sẽ hoàn thành các công việc phát sinh.
+                    Rất mong nhận được sự chấp thuận từ ban Giám đốc.
+                    Xin chân thành cảm ơn.
+                  </label>
+                </div>
+
+              </div>
+
+              <div class="modal-footer">
+                <button class="btn btn-primary" type="button">Hủy đơn</button>
+                <button class="btn btn-primary" type="button" (click)="save()">Đăng ký</button>
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+            <!-- /.modal-content-->
+          </div>
+          <!-- /.modal-dialog-->
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

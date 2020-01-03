@@ -1,0 +1,40 @@
+.leave-form {
+    font-size: 85%;
+}
+
+.leave-form input, select, button, textarea {
+    font-size: 100% !important;
+}
+.leave-datetime-control>select {
+    margin-left: 10px;
+}
+.leave-datetime-control {
+    margin-bottom: 10px;
+}
+.leave-form>div.row {
+    margin-bottom: 10px;
+}
+.cus-header-action-date>label {
+    margin-right: 5px;
+}
+.cus-header-action-date>input {
+    width: 165px !important;
+    margin-right: 15px;
+}
+.cus-action>button {
+    margin-right: 5px;
+}
+
+.cus-time>div {
+    width: 50% !important;
+    height: 10px;
+}
+.form-inline.cus-time {
+    margin-top: 5px;
+}
+.cus-time-left {
+    border-radius: 5px 0 0 5px;
+}
+.cus-time-right {
+    border-radius: 0 5px 5px 0;
+}

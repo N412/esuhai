@@ -1,0 +1,38 @@
+.container-fluid {
+    font-size: 85%;
+}
+.container-fluid input, select, button {
+    font-size: 100% !important;
+}
+
+.leave-datetime-control>select {
+    margin-left: 10px;
+}
+.leave-datetime-control {
+    margin-bottom: 10px;
+}
+.leave-form>div.row {
+    margin-bottom: 10px;
+}
+.cus-header-action-date>label {
+    margin-right: 5px;
+}
+.cus-header-action-date>input {
+    width: 165px !important;
+    margin-right: 15px;
+}
+
+.cus-header-action-select>label {
+    width: 80px;
+}
+.cus-header-action-select>select {
+    width: calc(100% - 80px) !important;
+}
+
+.cus-header-action-search>button {
+    width: 90px;
+    margin-left: 10px;
+}
+.cus-header-action-search>input {
+    width: calc(100% - 100px);
+}
